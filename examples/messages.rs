@@ -26,6 +26,8 @@ impl MessagePanel {
 
 impl Render for MessagePanel {
 	fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+		println!("->> MessagePanel RENDER");
+
 		let count = self.store.read(cx).count;
 
 		div()
@@ -38,11 +40,15 @@ impl Render for MessagePanel {
 			.child(
 				Button::new("add-message").label("Add message").on_click(cx.listener(
 					|this, _evt, _win, cx| {
+						println!("->> BUTTON CLICK");
 						this.component_ui_stuff = "something else".to_string();
 
 						this.store.update(cx, |store, cx| {
+							println!("->> STORE UPDATE  (prev: {})", store.count);
 							store.count += 1;
+							println!("->> STORE UPDATE NOTIFY PRE");
 							cx.notify();
+							println!("->> STORE UPDATE NOTIFY POST");
 						});
 					},
 				)),
