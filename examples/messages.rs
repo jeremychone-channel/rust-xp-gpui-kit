@@ -7,9 +7,12 @@ struct MessageStore {
 }
 
 struct MessagePanel {
-	component_ui_stuff: String,
 	store: Entity<MessageStore>,
+	// required to not drop subscription
 	_sub: Subscription,
+
+	// experiment to see if we can UI component state
+	component_ui_stuff: String,
 }
 
 impl MessagePanel {
