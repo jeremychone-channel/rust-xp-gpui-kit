@@ -1,10 +1,36 @@
-mod error;
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::{
+	AppContext as _, Context, IntoElement, ParentElement as _, Render, Styled as _, Window, WindowOptions,
+	application, assets, div, init, open_window,
+};
+// use gpui_kit::*;
 
-pub use error::{Error, Result};
+struct HelloWorld;
 
-#[tokio::main]
-async fn main() -> Result<()> {
-	println!("Hello, World!");
+impl Render for HelloWorld {
+	fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
+		div()
+			.flex()
+			.flex_col()
+			.size_full()
+			.items_center()
+			.justify_center()
+			.gap_2()
+			.child("Hello, World!")
+			.child(
+				Button::new("hello")
+					.primary()
+					.label("Click me")
+					.on_click(|_, _, _| println!("Clicked!")),
+			)
+	}
+}
 
-	Ok(())
+fn main() {
+	application().with_assets(assets::Assets).run(|cx| {
+		init(cx);
+
+		open_window(WindowOptions::default(), cx, |_, cx| cx.new(|_| HelloWorld))
+			.expect("Failed to open window");
+	});
 }
