@@ -1,0 +1,24 @@
+[package]
+name = "rust-xp-gpui-kit"
+version = "0.0.1"
+publish = false
+repo = "https://github.com/jeremychone-channel/rust-xp-gpui-kit"
+edition = "2024"
+
+[lints.rust]
+unsafe_code = "forbid"
+# unused = { level = "allow", priority = -1 } # For exploratory dev.
+
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false
+
+[dependencies]
+# -- Async
+tokio = { version = "1", features = ["full"] }
+# -- UI
+gpui-kit = "0.9.1"
+# -- Others
+derive_more = { version = "2", features = ["from", "display"] }
