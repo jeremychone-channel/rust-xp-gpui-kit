@@ -7,15 +7,20 @@ struct MessageStore {
 }
 
 struct MessagePanel {
+	component_ui_stuff: String,
 	store: Entity<MessageStore>,
-	_subscription: Subscription,
+	_sub: Subscription,
 }
 
 impl MessagePanel {
 	fn new(cx: &mut Context<Self>) -> Self {
 		let store = cx.new(|_| MessageStore { count: 0 });
-		let _subscription = cx.observe(&store, |_, _, cx| cx.notify());
-		Self { store, _subscription }
+		let _sub = cx.observe(&store, |_, _, cx| cx.notify());
+		Self {
+			store,
+			_sub,
+			component_ui_stuff: "hello someting".to_string(),
+		}
 	}
 }
 
@@ -31,14 +36,16 @@ impl Render for MessagePanel {
 			.justify_center()
 			.child(format!("Messages: {count}"))
 			.child(
-				Button::new("add-message")
-					.label("Add message")
-					.on_click(cx.listener(|this, _, _, cx| {
+				Button::new("add-message").label("Add message").on_click(cx.listener(
+					|this, _evt, _win, cx| {
+						this.component_ui_stuff = "something else".to_string();
+
 						this.store.update(cx, |store, cx| {
 							store.count += 1;
 							cx.notify();
 						});
-					})),
+					},
+				)),
 			)
 	}
 }
